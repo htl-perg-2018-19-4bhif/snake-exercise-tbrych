@@ -1,0 +1,23 @@
+{
+  "name": "snake-exercise-tbrych",
+  "version": "1.0.0",
+  "description": "",
+  "main": "snake.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/htl-perg-2018-19-4bhif/snake-exercise-tbrych.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/htl-perg-2018-19-4bhif/snake-exercise-tbrych/issues"
+  },
+  "homepage": "https://github.com/htl-perg-2018-19-4bhif/snake-exercise-tbrych#readme",
+  "dependencies": {
+    "ansi": "~0.3.1",
+    "keypress": "~0.2.1"
+  }
+}
