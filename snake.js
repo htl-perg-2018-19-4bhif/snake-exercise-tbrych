@@ -7,10 +7,11 @@ var gameSize = { lenX: 40, lenY: 20 };
 var points = 0;
 var speed = 3;
 var posSnake = { posX: gameSize.lenX / 2, posY: gameSize.lenY / 2 };
-var posApple = { posX: 0, posY: 0 };
+var posApple = { posX: 1, posY: 1 };
 var direction = 0;
 var first = true;
 
+paintArea();
 initKeypress();
 playGame();
 
@@ -19,22 +20,23 @@ function playGame() {
     //If it's the first call place an apple on a random position
     if (first) {
         first = false;
-        placeApple();
+        createApple();
     }
     //Move the snake
+    removeSnake();
     switch (direction) {
         case 0: posSnake.posX += 1; break;      //right
         case 1: posSnake.posX -= 1; break;      //left
         case 2: posSnake.posY -= 1; break;      //up
         case 3: posSnake.posY += 1; break;      //down
     }
+    placeSnake();
     //Check if the snake hits an apple
     if (posSnake.posX === posApple.posX && posSnake.posY === posApple.posY) {
         points++;
         speed++;
-        placeApple();
+        createApple();
     }
-    repaintArea();
     //Check if the snake hits the border
     if (posSnake.posX <= 0 || posSnake.posX >= gameSize.lenX - 1 || posSnake.posY <= 0 || posSnake.posY >= gameSize.lenY - 1) {
         quitGame();
@@ -42,23 +44,22 @@ function playGame() {
     setTimeout(playGame, 1000 / speed);
 }
 
-//Places an apple on a random position      -->     TODO: Make this more efficient
-function placeApple() {
+//Places an apple on a random position
+function createApple() {
+    printPoints();
+    removeApple();
     posApple.posX = Math.floor(Math.random() * Math.floor(gameSize.lenX - 2) + 1);
     posApple.posY = Math.floor(Math.random() * Math.floor(gameSize.lenY - 2) + 1);
+    placeApple();
 }
 
-//Repaint the Area
-function repaintArea() {
+//Paint the Area
+function paintArea() {
     process.stdout.write('\x1Bc');
     cursor.bg.grey();
     for (var y = 0; y < gameSize.lenY; y++) {
         for (var x = 0; x < gameSize.lenX; x++) {
-            if (x === posSnake.posX && y === posSnake.posY) {
-                cursor.bg.green().write(' ').bg.reset();
-            } else if (x === posApple.posX && y === posApple.posY) {
-                cursor.bg.red().write(' ').bg.reset();
-            } else if (x === 0 || x === gameSize.lenX - 1 || y === 0 || y === gameSize.lenY - 1) {
+            if (x === 0 || x === gameSize.lenX - 1 || y === 0 || y === gameSize.lenY - 1) {
                 cursor.bg.grey().write(' ').bg.reset();
             } else {
                 cursor.bg.white().write(' ').bg.reset();
@@ -66,6 +67,27 @@ function repaintArea() {
         }
         process.stdout.write('\n');
     }
+    cursor.bg.reset();
+}
+//Functions to place and remove snake and apple and to print the speed and the points
+function placeApple() {
+    cursor.goto(posApple.posX + 1, posApple.posY + 1);
+    cursor.bg.red().write(' ').bg.reset();
+}
+function removeApple() {
+    cursor.goto(posApple.posX + 1, posApple.posY + 1);
+    cursor.bg.white().write(' ').bg.reset();
+}
+function placeSnake() {
+    cursor.goto(posSnake.posX + 1, posSnake.posY + 1);
+    cursor.bg.green().write(' ').bg.reset();
+}
+function removeSnake() {
+    cursor.goto(posSnake.posX + 1, posSnake.posY + 1);
+    cursor.bg.white().write(' ').bg.reset();
+}
+function printPoints() {
+    cursor.goto(0, gameSize.lenY + 1);
     process.stdout.write('Points: ' + points + '\n');
     process.stdout.write('Speed: ' + speed + '\n');
 }
@@ -90,7 +112,6 @@ function initKeypress() {
 
 //Quit the game
 function quitGame() {
-    repaintArea();
     cursor.reset();
     cursor.bg.grey();
     cursor.fg.red();
