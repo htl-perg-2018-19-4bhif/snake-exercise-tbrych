@@ -73,6 +73,7 @@ function paintArea() {
 function placeApple() {
     cursor.goto(posApple.posX + 1, posApple.posY + 1);
     cursor.bg.red().write(' ').bg.reset();
+    process.stdout.write('\x1B[?25l');
 }
 function removeApple() {
     cursor.goto(posApple.posX + 1, posApple.posY + 1);
@@ -81,6 +82,8 @@ function removeApple() {
 function placeSnake() {
     cursor.goto(posSnake.posX + 1, posSnake.posY + 1);
     cursor.bg.green().write(' ').bg.reset();
+    process.stdout.write('\x1B[?25l');
+    
 }
 function removeSnake() {
     cursor.goto(posSnake.posX + 1, posSnake.posY + 1);
